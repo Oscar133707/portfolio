@@ -43,7 +43,16 @@ const Navbar: React.FC = () => {
   }, [isOpen]);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prev => {
+      const newState = !prev;
+      if (!newState) {
+        // Restore body scroll when closing
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
+      return newState;
+    });
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -53,7 +62,10 @@ const Navbar: React.FC = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsOpen(false);
+      // Restore body scroll
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
     }
   };
 
@@ -133,12 +145,26 @@ const Navbar: React.FC = () => {
             className="md:hidden fixed inset-0 bg-white z-[100] flex flex-col"
             style={{ top: 0, left: 0, right: 0, bottom: 0 }}
           >
-            {/* Close button area at top */}
-            <div className="flex justify-between items-center p-4 border-b border-slate-200 bg-white">
-              <span className="font-bold text-lg text-slate-900">Meny</span>
+            {/* Header with logo and close button */}
+            <div className="flex justify-between items-center p-4 border-b border-slate-200 bg-white z-[101]">
+              <a 
+                href="#hero" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(e, '#hero');
+                }}
+                className="flex items-center space-x-2 group"
+              >
+                <div className="p-2 rounded-lg transform transition-transform group-hover:scale-110 bg-accent text-white">
+                  <Code2 size={24} />
+                </div>
+                <span className="font-bold text-xl tracking-tight text-slate-900">
+                  Oscar Johansson
+                </span>
+              </a>
               <button
                 onClick={toggleMenu}
-                className="p-2 text-slate-700 hover:text-accent focus:outline-none rounded-lg hover:bg-slate-100 transition-colors"
+                className="p-2 text-slate-700 hover:text-accent focus:outline-none rounded-lg hover:bg-slate-100 transition-colors z-[102]"
                 aria-label="Stäng meny"
               >
                 <X size={28} />
