@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 const Hero: React.FC = () => {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-0 overflow-hidden scroll-mt-20">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-0 overflow-x-hidden overflow-y-auto scroll-mt-20 w-full">
       
       {/* Split-Screen Background */}
       <div className="absolute inset-0 z-0 flex flex-col md:flex-row">

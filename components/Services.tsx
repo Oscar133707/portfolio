@@ -75,11 +75,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-24 md:py-32 bg-slate-50 relative overflow-hidden scroll-mt-24">
+    <section id="services" className="py-24 md:py-32 bg-slate-50 relative overflow-x-hidden overflow-y-visible scroll-mt-24 w-full">
       {/* Abstract Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
-        <div className="absolute top-20 right-10 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
+      <div className="absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-visible pointer-events-none">
+        <div className="absolute top-20 left-0 md:left-10 w-64 md:w-96 h-64 md:h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
+        <div className="absolute top-20 right-0 md:right-10 w-64 md:w-96 h-64 md:h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

@@ -35,7 +35,7 @@ const projects: Project[] = [
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="portfolio" className="py-20 bg-slate-50 scroll-mt-24">
+    <section id="portfolio" className="py-20 bg-slate-50 scroll-mt-24 overflow-x-hidden w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2 
