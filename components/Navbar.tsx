@@ -25,48 +25,65 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     // Lock/unlock body scroll when menu opens/closes
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // Save current scroll position
+      const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      // Store scroll position for restoration
+      (document.body as any).scrollY = scrollY;
     } else {
-      document.body.style.overflow = '';
+      // Restore scroll position
+      const scrollY = (document.body as any).scrollY || 0;
       document.body.style.position = '';
+      document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, scrollY);
     }
     
     return () => {
       // Cleanup on unmount
       document.body.style.overflow = '';
       document.body.style.position = '';
+      document.body.style.top = '';
       document.body.style.width = '';
     };
   }, [isOpen]);
 
   const toggleMenu = () => {
-    setIsOpen(prev => {
-      const newState = !prev;
-      if (!newState) {
-        // Restore body scroll when closing
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-      }
-      return newState;
-    });
+    setIsOpen(prev => !prev);
+    // The useEffect will handle scroll position restoration
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    
+    // Get the target element first (before closing menu)
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
-      // Restore body scroll
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
+    
+    // Close menu
+    setIsOpen(false);
+    
+    // Wait for menu to close and body to be restored, then scroll
+    setTimeout(() => {
+      if (element) {
+        // Calculate the target position
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        const offset = 80; // Account for fixed navbar height
+        
+        // Scroll to the target
+        window.scrollTo({
+          top: elementPosition - offset,
+          behavior: 'smooth'
+        });
+      } else if (targetId === 'hero') {
+        // Scroll to top for hero section
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 150);
   };
 
   return (
