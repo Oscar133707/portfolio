@@ -6,11 +6,11 @@ import { Project } from '../types';
 const projects: Project[] = [
   {
     id: 1,
-    title: "Villa Ahlvar",
-    description: "Modern och elegant webbplats för Villa Ahlvar med responsiv design och användarvänligt gränssnitt.",
+    title: "Delita Advise",
+    description: "Modern webbplats för Delita Advise, en digital redovisningsbyrå i Malmö. Professionell design med fokus på användarvänlighet och tillgänglighet.",
     technologies: ["React", "TypeScript", "Tailwind CSS"],
-    imageUrl: "/compressed 2/Namnlös design (1).jpg",
-    link: "https://villa-ahlvar.netlify.app/",
+    imageUrl: "/compressed 2/Namnlös design (4).webp",
+    link: "https://delita-advise.netlify.app/",
     category: "Webb"
   },
   {
@@ -24,19 +24,19 @@ const projects: Project[] = [
   },
   {
     id: 3,
-    title: "Ola Ahlvarsson",
-    description: "Personlig webbplats för entreprenör, internationell talare och moderator. Visar tjänster, böcker och kundrecensioner med professionell design.",
+    title: "Mindsport",
+    description: "Webbplats för Mindsport AB med modern design och responsivt gränssnitt. Visar företagets tjänster och värderingar på ett professionellt sätt.",
     technologies: ["React", "TypeScript", "Tailwind CSS"],
-    imageUrl: "/compressed 2/Namnlös design (3).jpg",
-    link: "https://www.ahlvarsson.com/",
+    imageUrl: "/compressed 2/Namnlös design (5).webp",
+    link: "https://mindsport-ab.vercel.app/",
     category: "Webb"
   }
 ];
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="portfolio" className="py-20 bg-slate-50 scroll-mt-24 overflow-x-hidden w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="portfolio" className="py-16 md:py-24 bg-slate-50 scroll-mt-24 overflow-x-hidden w-full px-5 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ const Portfolio: React.FC = () => {
         {/* Project Grid */}
         <motion.div 
             layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
             {projects.map((project) => (
                 <ProjectCard key={project.id} project={project} />

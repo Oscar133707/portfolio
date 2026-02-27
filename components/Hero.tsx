@@ -14,8 +14,10 @@ const Hero: React.FC = () => {
             src="/for hero/IMG_8897.JPG" 
             alt="Tech Background" 
             className="w-full h-full object-cover"
+            loading="eager"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50"></div>
         </div>
         
         {/* Right Image - Full width on mobile, half width on desktop */}
@@ -24,8 +26,10 @@ const Hero: React.FC = () => {
             src="/for hero/IMG_4277.jpg" 
             alt="Athletics Background" 
             className="w-full h-full object-cover"
+            loading="eager"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50"></div>
         </div>
       </div>
 
@@ -35,7 +39,7 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 leading-[1.2] tracking-[-0.02em]">
             Elitidrottare & <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
               Webbutvecklare
@@ -47,7 +51,7 @@ const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-4 max-w-2xl mx-auto text-xl text-slate-300 mb-10 leading-relaxed"
+          className="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-slate-200 mb-10 leading-[1.7]"
         >
           Jag skapar moderna webbplatser och automatiserar affärsprocesser med AI. 
           Låt oss ta din verksamhet till nästa nivå med smart teknik.
@@ -61,14 +65,14 @@ const Hero: React.FC = () => {
         >
           <a
             href="#portfolio"
-            className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-accent hover:bg-blue-600 transition-all hover:scale-105 shadow-lg hover:shadow-blue-500/30"
+            className="inline-flex items-center justify-center min-h-[44px] px-8 py-4 border border-transparent text-base font-semibold rounded-lg text-white bg-accent hover:bg-blue-600 transition-all duration-200 hover:scale-105 active:scale-[0.98] active:opacity-90 shadow-lg hover:shadow-blue-500/30 focus-visible:outline-2 focus-visible:outline-blue-400 focus-visible:outline-offset-2"
           >
             Se mina projekt
             <ArrowRight className="ml-2 -mr-1 h-5 w-5" />
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center justify-center px-8 py-4 border border-white/30 text-base font-semibold rounded-lg text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all hover:scale-105"
+            className="inline-flex items-center justify-center min-h-[44px] px-8 py-4 border-2 border-white/90 text-base font-semibold rounded-lg text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-200 hover:scale-105 active:scale-[0.98] active:opacity-90 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
           >
             Boka ett samtal
           </a>

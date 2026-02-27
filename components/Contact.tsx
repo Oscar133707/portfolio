@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { Mail, Send } from 'lucide-react';
+import { Mail, Send, Loader2, CheckCircle } from 'lucide-react';
 import { ContactFormData } from '../types';
 
 const Contact: React.FC = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>();
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log("Form Data:", data);
-    alert("Tack för ditt meddelande! Jag återkommer inom kort.");
-    reset();
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log("Form Data:", data);
+      setSubmitSuccess(true);
+      reset();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    } catch (error) {
+      console.error("Form submission error:", error);
+    }
   };
 
   return (
-    <section id="contact" className="py-20 bg-slate-900 text-white scroll-mt-24 overflow-x-hidden w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-16 md:py-24 bg-slate-900 text-white scroll-mt-24 overflow-x-hidden w-full px-5 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           
           {/* Text Content */}
@@ -40,8 +50,8 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm text-slate-400">Email</p>
-                        <a href="mailto:info@oscarjohansson.eu" className="text-xl font-semibold hover:text-accent transition-colors">
-                            info@oscarjohansson.eu
+                        <a href="mailto:kontakt@oscarjohansson.eu" className="text-xl font-semibold hover:text-accent transition-colors">
+                            kontakt@oscarjohansson.eu
                         </a>
                     </div>
                 </div>
@@ -72,8 +82,9 @@ const Contact: React.FC = () => {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Namn</label>
                 <input
                   {...register("name", { required: "Vänligen ange ditt namn" })}
-                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+                  className="w-full min-h-[44px] px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all duration-200"
                   placeholder="Ditt namn"
+                  aria-invalid={errors.name ? "true" : "false"}
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
               </div>
@@ -81,12 +92,14 @@ const Contact: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
                 <input
+                  type="email"
                   {...register("email", { 
                     required: "Vänligen ange din email",
                     pattern: { value: /^\S+@\S+$/i, message: "Ogiltig e-postadress" }
                   })}
-                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+                  className="w-full min-h-[44px] px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all duration-200"
                   placeholder="din@email.com"
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </div>
@@ -109,24 +122,43 @@ const Contact: React.FC = () => {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Meddelande</label>
                 <textarea
                   {...register("message", { required: "Vänligen skriv ett meddelande" })}
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all resize-none"
+                  rows={6}
+                  minLength={10}
+                  className="w-full min-h-[150px] px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all duration-200 resize-none"
                   placeholder="Berätta kort om ditt projekt..."
                 />
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
 
+              {/* Success Message */}
+              {submitSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3"
+                >
+                  <CheckCircle className="text-green-600 flex-shrink-0" size={20} />
+                  <p className="text-green-800 text-sm font-medium">
+                    Tack för ditt meddelande! Jag återkommer inom kort.
+                  </p>
+                </motion.div>
+              )}
+
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-accent hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition-all hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={isSubmitting || submitSuccess}
+                className="w-full min-h-[44px] bg-accent hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition-all duration-200 hover:shadow-lg active:scale-[0.98] active:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-blue-400 focus-visible:outline-offset-2"
               >
                 {isSubmitting ? (
-                    "Skickar..."
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    <span>Skickar...</span>
+                  </>
                 ) : (
-                    <>
-                        Skicka Förfrågan <Send size={18} />
-                    </>
+                  <>
+                    <span>Skicka Förfrågan</span>
+                    <Send size={18} />
+                  </>
                 )}
               </button>
             </form>

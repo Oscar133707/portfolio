@@ -41,7 +41,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay }}
       whileHover={{ y: -8 }}
-      className={`group relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 ${hoverBorder} shadow-sm hover:shadow-2xl ${shadowColor} transition-all duration-300 ease-out flex flex-col`}
+      whileTap={{ y: -2 }}
+      className={`group relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 ${hoverBorder} shadow-sm hover:shadow-2xl ${shadowColor} transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg`}
     >
       {/* Icon Container */}
       <div className="mb-8 relative">
@@ -75,14 +76,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-24 md:py-32 bg-slate-50 relative overflow-x-hidden overflow-y-visible scroll-mt-24 w-full">
+    <section id="services" className="py-16 md:py-24 bg-slate-50 relative overflow-x-hidden overflow-y-visible scroll-mt-24 w-full px-5 sm:px-6 lg:px-8">
       {/* Abstract Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-visible pointer-events-none">
         <div className="absolute top-20 left-0 md:left-10 w-64 md:w-96 h-64 md:h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
         <div className="absolute top-20 right-0 md:right-10 w-64 md:w-96 h-64 md:h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
         <div className="text-center mb-20 md:mb-24">
@@ -115,7 +116,7 @@ const Services: React.FC = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 max-w-6xl mx-auto">
           
           <ServiceCard 
             theme="blue"

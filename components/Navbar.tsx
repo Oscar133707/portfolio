@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code2 } from 'lucide-react';
+import { Menu, X, Code2, User, Briefcase, Wrench, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
-  { name: 'Om Mig', href: '#about' },
-  { name: 'Portfolio', href: '#portfolio' },
-  { name: 'Tjänster', href: '#services' },
+  { name: 'Om Mig', href: '#about', icon: User },
+  { name: 'Portfolio', href: '#portfolio', icon: Briefcase },
+  { name: 'Tjänster', href: '#services', icon: Wrench },
 ];
 
 const Navbar: React.FC = () => {
@@ -155,10 +155,10 @@ const Navbar: React.FC = () => {
       <AnimatePresence mode="wait">
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, x: '-100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '-100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="md:hidden fixed inset-0 bg-white z-[100] flex flex-col"
             style={{ top: 0, left: 0, right: 0, bottom: 0 }}
           >
@@ -189,23 +189,28 @@ const Navbar: React.FC = () => {
             </div>
             
             {/* Menu content */}
-            <div className="flex-1 flex flex-col justify-center px-6 py-8 space-y-3 overflow-y-auto -mt-16">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="block px-4 py-4 text-xl font-medium text-slate-700 hover:text-accent hover:bg-slate-50 rounded-lg transition-all text-center active:scale-95"
-                >
-                  {link.name}
-                </a>
-              ))}
+            <div className="flex-1 flex flex-col justify-center px-5 sm:px-6 py-8 space-y-2 overflow-y-auto -mt-16">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="flex items-center justify-center gap-3 px-4 py-4 min-h-[44px] text-lg font-medium text-slate-700 hover:text-accent hover:bg-blue-50 rounded-lg transition-all duration-200 active:scale-[0.98] active:opacity-90 focus-visible:outline-2 focus-visible:outline-blue-400 focus-visible:outline-offset-2"
+                  >
+                    <Icon size={20} className="flex-shrink-0" />
+                    <span>{link.name}</span>
+                  </a>
+                );
+              })}
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="block w-full text-center mt-4 bg-accent text-white px-6 py-4 rounded-lg font-bold text-lg shadow-lg active:scale-95 transition-transform hover:bg-blue-600"
+                className="flex items-center justify-center gap-3 w-full min-h-[44px] mt-4 bg-accent text-white px-6 py-4 rounded-lg font-bold text-lg shadow-lg active:scale-[0.98] active:opacity-90 transition-all duration-200 hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-blue-400 focus-visible:outline-offset-2"
               >
-                Boka ett samtal
+                <Calendar size={20} className="flex-shrink-0" />
+                <span>Boka ett samtal</span>
               </a>
             </div>
           </motion.div>
