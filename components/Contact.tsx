@@ -57,7 +57,7 @@ const Contact: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mt-12 p-6 bg-slate-800/50 rounded-2xl border border-slate-700">
+            <div className="mt-12">
                 <h4 className="font-semibold text-lg mb-2 text-blue-400">Varför anlita mig?</h4>
                 <ul className="space-y-2 text-slate-300">
                     <li className="flex items-center gap-2">✓ Snabb leverans och tydlig kommunikation</li>

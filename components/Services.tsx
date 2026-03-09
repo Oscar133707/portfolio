@@ -30,8 +30,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
   
   // Color configurations based on theme
   const bgGradient = isBlue ? 'from-blue-500 to-cyan-400' : 'from-purple-500 to-indigo-500';
-  const hoverBorder = isBlue ? 'group-hover:border-blue-200' : 'group-hover:border-purple-200';
-  const shadowColor = isBlue ? 'group-hover:shadow-blue-500/10' : 'group-hover:shadow-purple-500/10';
   const featureColor = isBlue ? 'text-blue-600' : 'text-purple-600';
 
   return (
@@ -42,15 +40,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
       transition={{ duration: 0.5, delay }}
       whileHover={{ y: -8 }}
       whileTap={{ y: -2 }}
-      className={`group relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 ${hoverBorder} shadow-sm hover:shadow-2xl ${shadowColor} transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg`}
+      className="group relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg"
     >
       {/* Icon Container */}
       <div className="mb-8 relative">
         <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${bgGradient} flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
           {icon}
         </div>
-        {/* Decorative blob behind icon */}
-        <div className={`absolute -inset-4 bg-gradient-to-br ${bgGradient} opacity-0 group-hover:opacity-20 blur-xl rounded-full transition-opacity duration-500`} />
       </div>
 
       {/* Content */}
