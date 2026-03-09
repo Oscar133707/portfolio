@@ -10,7 +10,7 @@ const projects: Project[] = [
     description: "Modern webbplats för Delita Advise, en digital redovisningsbyrå i Malmö. Professionell design med fokus på användarvänlighet och tillgänglighet.",
     technologies: ["React", "TypeScript", "Tailwind CSS"],
     imageUrl: "/compressed 2/Namnlös design (4).webp",
-    link: "https://delita-advise.netlify.app/",
+    link: "https://delita.se",
     category: "Webb"
   },
   {
@@ -28,7 +28,7 @@ const projects: Project[] = [
     description: "Webbplats för Mindsport AB med modern design och responsivt gränssnitt. Visar företagets tjänster och värderingar på ett professionellt sätt.",
     technologies: ["React", "TypeScript", "Tailwind CSS"],
     imageUrl: "/compressed 2/Namnlös design (5).webp",
-    link: "https://mindsport-ab.vercel.app/",
+    link: "https://mindsport.se",
     category: "Webb"
   }
 ];
