@@ -1,38 +1,71 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
+// Images for mobile crossfade — start with athletics to match current feel
+const mobileImages = [
+  '/for hero/IMG_4277.jpg',
+  '/for hero/IMG_8897.JPG',
+];
+
 const Hero: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % mobileImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-0 overflow-x-hidden overflow-y-auto scroll-mt-20 w-full">
-      
-      {/* Split-Screen Background */}
-      <div className="absolute inset-0 z-0 flex flex-col md:flex-row">
-        {/* Left Image - Hidden on mobile, visible on desktop */}
-        <div className="hidden md:block relative w-full md:w-1/2 h-1/2 md:h-full">
-          <img 
-            src="/for hero/IMG_8897.JPG" 
-            alt="Tech Background" 
+
+      {/* Split-Screen Background — desktop only */}
+      <div className="absolute inset-0 z-0 hidden md:flex">
+        <div className="relative w-1/2 h-full">
+          <img
+            src="/for hero/IMG_8897.JPG"
+            alt="Tech Background"
             className="w-full h-full object-cover"
             loading="eager"
           />
-          {/* Enhanced gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50" />
         </div>
-        
-        {/* Right Image - Full width on mobile, half width on desktop */}
-        <div className="relative w-full h-full md:w-1/2 md:h-full">
-          <img 
-            src="/for hero/IMG_4277.jpg" 
-            alt="Athletics Background" 
+        <div className="relative w-1/2 h-full">
+          <img
+            src="/for hero/IMG_4277.jpg"
+            alt="Athletics Background"
             className="w-full h-full object-cover"
             loading="eager"
           />
-          {/* Enhanced gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50" />
         </div>
       </div>
 
+      {/* Crossfade Background — mobile only */}
+      <div className="absolute inset-0 z-0 md:hidden">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={activeIndex}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: 'easeInOut' }}
+          >
+            <img
+              src={mobileImages[activeIndex]}
+              alt="Hero Background"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/50" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -53,7 +86,7 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-slate-200 mb-10 leading-[1.7]"
         >
-          Jag skapar moderna webbplatser och automatiserar affärsprocesser med AI. 
+          Jag skapar moderna webbplatser och automatiserar affärsprocesser med AI.
           Låt oss ta din verksamhet till nästa nivå med smart teknik.
         </motion.p>
 
