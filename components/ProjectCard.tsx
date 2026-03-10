@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 import { Project } from '../types';
@@ -7,17 +7,28 @@ interface ProjectCardProps {
   project: Project;
 }
 
-// Only enable hover animations on devices with a real pointer (mouse), not touch screens
-const supportsHover = typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  // Dynamically tracks whether the device supports true hover (mouse).
+  // Listens for changes so DevTools device simulation is respected.
+  const [canHover, setCanHover] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover)');
+    setCanHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setCanHover(e.matches);
+      if (!e.matches) setIsHovered(false);
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   return (
     <motion.div
-      whileHover={supportsHover ? { y: -8 } : undefined}
+      whileHover={canHover ? { y: -8 } : undefined}
       transition={{ type: 'spring', stiffness: 300 }}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => { if (canHover) setIsHovered(true); }}
       onMouseLeave={() => setIsHovered(false)}
       className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-100 flex flex-col h-full active:translate-y-[-2px] active:shadow-xl transition-transform duration-300"
     >

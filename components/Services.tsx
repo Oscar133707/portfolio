@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Monitor, Bot, Check, Sparkles } from 'lucide-react';
 
@@ -26,9 +26,23 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features, icon, theme, delay }) => {
+  // Dynamically tracks whether the device supports true hover (mouse).
+  // Listens for changes so DevTools device simulation is respected.
+  const [canHover, setCanHover] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover)');
+    setCanHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setCanHover(e.matches);
+      if (!e.matches) setIsHovered(false);
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   const isBlue = theme === 'blue';
-  
-  // Color configurations based on theme
   const bgGradient = isBlue ? 'from-blue-500 to-cyan-400' : 'from-purple-500 to-indigo-500';
   const featureColor = isBlue ? 'text-blue-600' : 'text-purple-600';
 
@@ -38,13 +52,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -8 }}
+      whileHover={canHover ? { y: -8 } : undefined}
       whileTap={{ y: -2 }}
-      className="group relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg"
+      onMouseEnter={() => { if (canHover) setIsHovered(true); }}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 ${isHovered ? 'shadow-2xl' : 'shadow-sm'} transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg`}
     >
       {/* Icon Container */}
-      <div className="mb-8 relative">
-        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${bgGradient} flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
+      <div className="mb-8">
+        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${bgGradient} flex items-center justify-center text-white shadow-lg transform transition-transform duration-300 ${isHovered ? 'scale-110 rotate-3' : ''}`}>
           {icon}
         </div>
       </div>
@@ -80,10 +96,10 @@ const Services: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center mb-20 md:mb-24">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -91,7 +107,7 @@ const Services: React.FC = () => {
           >
             Vad jag erbjuder
           </motion.span>
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -100,7 +116,7 @@ const Services: React.FC = () => {
           >
             Tjänster
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -113,8 +129,8 @@ const Services: React.FC = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 max-w-6xl mx-auto">
-          
-          <ServiceCard 
+
+          <ServiceCard
             theme="blue"
             icon={<Monitor size={32} strokeWidth={2.5} />}
             title="Webbutveckling"
@@ -128,7 +144,7 @@ const Services: React.FC = () => {
             delay={0.2}
           />
 
-          <ServiceCard 
+          <ServiceCard
             theme="purple"
             icon={<Sparkles size={32} strokeWidth={2.5} />}
             title="AI-Automation"
