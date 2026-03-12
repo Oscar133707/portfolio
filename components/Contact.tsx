@@ -7,21 +7,31 @@ import { ContactFormData } from '../types';
 const Contact: React.FC = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>();
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
+    setSubmitError(false);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log("Form Data:", data);
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
       setSubmitSuccess(true);
       reset();
-      
+
       // Hide success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
     } catch (error) {
       console.error("Form submission error:", error);
+      setSubmitError(true);
     }
   };
 
@@ -129,6 +139,20 @@ const Contact: React.FC = () => {
                 />
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
+
+              {/* Error Message */}
+              {submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 bg-red-50 border border-red-200 rounded-lg"
+                >
+                  <p className="text-red-800 text-sm font-medium">
+                    Något gick fel. Försök igen eller kontakta mig direkt på{' '}
+                    <a href="mailto:kontakt@oscarjohansson.eu" className="underline">kontakt@oscarjohansson.eu</a>
+                  </p>
+                </motion.div>
+              )}
 
               {/* Success Message */}
               {submitSuccess && (
