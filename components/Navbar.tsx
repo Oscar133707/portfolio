@@ -16,39 +16,36 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   useEffect(() => {
-    // Lock/unlock body scroll when menu opens/closes
+    // Lock scroll without layout shift: freeze body at current position using position:fixed
     if (isOpen) {
-      // Save current scroll position
       const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-      // Store scroll position for restoration
-      (document.body as any).scrollY = scrollY;
     } else {
-      // Restore scroll position
-      const scrollY = (document.body as any).scrollY || 0;
+      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      window.scrollTo(0, scrollY);
+      // Restore scroll position instantly to avoid smooth-scroll animation on close
+      window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
     }
-    
     return () => {
-      // Cleanup on unmount
-      document.body.style.overflow = '';
+      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
     };
   }, [isOpen]);
 
@@ -83,13 +80,13 @@ const Navbar: React.FC = () => {
         // Scroll to top for hero section
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    }, 150);
+    }, 220);
   };
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 overflow-x-hidden ${
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+      className={`fixed w-full z-50 transition-[background-color,box-shadow,padding] duration-300 ease-in-out overflow-x-hidden ${
+        isScrolled ? 'bg-white shadow-sm py-4' : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,22 +140,33 @@ const Navbar: React.FC = () => {
             <button
               onClick={toggleMenu}
               className={`focus:outline-none p-2 ${isScrolled ? 'text-slate-900 hover:text-accent' : 'text-white hover:text-blue-200'}`}
-              aria-label="Öppna meny"
+              aria-label={isOpen ? 'Stäng meny' : 'Öppna meny'}
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={isOpen ? 'close' : 'open'}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.15 }}
+                  style={{ display: 'flex' }}
+                >
+                  {isOpen ? <X size={28} /> : <Menu size={28} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Navigation Dropdown */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '-100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '-100%' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             className="md:hidden fixed inset-0 bg-white z-[100] flex flex-col"
             style={{ top: 0, left: 0, right: 0, bottom: 0 }}
           >
