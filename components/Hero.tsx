@@ -87,7 +87,7 @@ const Hero: React.FC = () => {
           className="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-slate-200 mb-10 leading-[1.7]"
         >
           Jag skapar moderna webbplatser och automatiserar affärsprocesser med AI.
-          Låt oss ta din verksamhet till nästa nivå med smart teknik.
+          Låt mig ta din verksamhet till nästa nivå med smart teknik.
         </motion.p>
 
         <motion.div
