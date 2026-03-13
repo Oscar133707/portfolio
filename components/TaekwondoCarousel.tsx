@@ -115,6 +115,16 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept keys when the user is typing in a form field
+      const target = e.target as HTMLElement;
+      const isFormField =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable;
+
+      if (isFormField) return;
+
       if (e.key === 'ArrowLeft') {
         scrollPrev();
       } else if (e.key === 'ArrowRight') {
