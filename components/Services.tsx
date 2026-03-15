@@ -171,6 +171,8 @@ const Services: React.FC = () => {
         }
         .animate-blob {
           animation: blob 7s infinite;
+          will-change: transform;
+          transform: translateZ(0);
         }
         .animation-delay-2000 {
           animation-delay: 2s;

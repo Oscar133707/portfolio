@@ -19,7 +19,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-[100svh] flex items-center justify-center pt-0 overflow-x-hidden scroll-mt-20 w-full">
+    <section id="hero" className="relative min-h-[var(--full-height,100svh)] flex items-center justify-center pt-0 overflow-x-hidden scroll-mt-20 w-full">
 
       {/* Split-Screen Background — desktop only */}
       <div className="absolute inset-0 z-0 hidden md:flex">

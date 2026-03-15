@@ -58,6 +58,29 @@
 }
 </script>
 <link rel="stylesheet" href="/index.css">
+  <script>
+    /* Set a stable full-height once at load — window.innerHeight never changes due to toolbar */
+    document.documentElement.style.setProperty('--full-height', window.innerHeight + 'px');
+  </script>
+  <script>
+    /* VisualViewport scroll compensator for Instagram WebView toolbar hop */
+    (function () {
+      if (!window.visualViewport) return;
+      var last = window.visualViewport.height;
+      window.visualViewport.addEventListener('resize', function () {
+        /* Skip when virtual keyboard is active (form field focused) */
+        var active = document.activeElement;
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+        var now = window.visualViewport.height;
+        var diff = last - now;
+        last = now;
+        /* Only toolbar-range changes (5–120px); full keyboard is ~300px */
+        if (Math.abs(diff) > 5 && Math.abs(diff) < 120) {
+          window.scrollBy({ top: -diff, behavior: 'instant' });
+        }
+      });
+    })();
+  </script>
 </head>
   <body class="bg-white text-primary antialiased selection:bg-accent selection:text-white">
     <div id="root"></div>
