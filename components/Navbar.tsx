@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Code2, User, Briefcase, Wrench, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -11,6 +11,7 @@ const navLinks = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const savedScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,27 +26,25 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     // Lock scroll without layout shift: freeze body at current position using position:fixed
     if (isOpen) {
-      const scrollY = window.scrollY;
+      savedScrollY.current = window.scrollY;
       document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
+      document.body.style.top = `-${savedScrollY.current}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
     } else {
-      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      // Restore scroll position instantly to avoid smooth-scroll animation on close
-      window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
+      // Restore from ref — style.top is already cleared so we can't read it here
+      window.scrollTo({ top: savedScrollY.current, behavior: 'instant' as ScrollBehavior });
     }
     return () => {
-      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+      // Only clear styles on unmount — scroll restoration is handled by the else-branch above
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      if (scrollY) window.scrollTo({ top: scrollY, behavior: 'instant' as ScrollBehavior });
     };
   }, [isOpen]);
 
