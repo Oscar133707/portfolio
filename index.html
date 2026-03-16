@@ -66,6 +66,7 @@
     /* VisualViewport scroll compensator for Instagram WebView toolbar hop */
     (function () {
       if (!window.visualViewport) return;
+      if (navigator.maxTouchPoints === 0) return; /* Skip on non-touch desktops */
       var last = window.visualViewport.height;
       window.visualViewport.addEventListener('resize', function () {
         /* Skip when virtual keyboard is active (form field focused) */
