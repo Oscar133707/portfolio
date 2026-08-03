@@ -76,7 +76,7 @@ root/
 # Install dependencies
 npm install
 
-# Start dev server (http://localhost:3000)
+# Start dev server (http://localhost:3001)
 npm run dev
 
 # Build for production
@@ -87,7 +87,7 @@ npm run preview
 ```
 
 ### Dev Server
-- **Port:** 3000
+- **Port:** 3001 (moved from 3000 to avoid collision with another local project on this machine)
 - **Host:** 0.0.0.0 (accessible from network)
 - **Hot Module Replacement:** Enabled
 
@@ -180,17 +180,20 @@ background: '#F8FAFC'  // slate-50
 ### Navbar ([components/Navbar.tsx](components/Navbar.tsx))
 **Features:**
 - Fixed positioning with scroll detection (bg changes on scroll)
-- Mobile menu with slide-in animation (Framer Motion)
-- Smooth scroll to sections (preventDefault + scrollIntoView)
-- Scroll position restoration when menu opens/closes
+- Mobile menu built on the 95garage pattern: `createPortal` renders an always-mounted scrim + drawer directly on `document.body`, animated with CSS `transition-opacity`/`transition-transform` (no `AnimatePresence` — avoids mount/unmount animation races)
+- Scroll lock is a single `document.body.style.overflow = isOpen ? 'hidden' : ''` — no `position:fixed`/`scrollTo` scroll-jacking
+- Escape key closes the drawer; click on the scrim closes it too
+- Smooth scroll to sections (preventDefault + scrollIntoView, relies on each section's `scroll-mt-*` — no hardcoded offset or setTimeout)
+- Scroll-spy via `IntersectionObserver` over `#about`, `#portfolio`, `#services` highlights the active link in both desktop nav and the drawer
 - Lucide React icons
 
 **Key Functions:**
-- `handleNavClick()` - Smooth scroll to sections
-- `handleMobileNavClick()` - Close menu and scroll
+- `handleNavClick()` - Closes the drawer, then smooth-scrolls to the target section on the next animation frame
+- `useEffect` (scroll-lock) - Toggles `body.style.overflow` and binds/unbinds the Escape-key listener based on `isOpen`
+- `useEffect` (scroll-spy) - `IntersectionObserver` driving `activeId`
 - `useEffect` - Scroll listener for navbar styling
 
-**Important:** Recently fixed scroll behavior - test thoroughly before modifying.
+**Important:** The drawer is portalled to `<body>` specifically to escape `<nav>`'s stacking/clip context — do not move it back inside `<nav>`.
 
 ### Hero ([components/Hero.tsx](components/Hero.tsx))
 **Features:**
@@ -405,7 +408,7 @@ const Component: React.FC<Props> = ({ required, optional }) => {
 
 ### NEVER Do These Things
 - ❌ **Remove overflow-x-hidden** - Fixes horizontal scroll on mobile (critical fix)
-- ❌ **Edit Navbar scroll logic** - Recently fixed, works correctly now
+- ❌ **Move the mobile drawer back inside `<nav>`** - It must stay portalled to `document.body` via `createPortal`, otherwise it's trapped in `<nav>`'s stacking/clip context and can't paint over the page
 - ❌ **Change Tailwind CDN setup** - Project uses runtime CDN, not build-time
 - ❌ **Hardcode years** - Use `new Date().getFullYear()` for dynamic dates
 - ❌ **Skip form validation** - Contact form validation is essential for quality

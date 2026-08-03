@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Raw, uncompressed source photos — working folder, not used by the site
+tilläggs bilder/

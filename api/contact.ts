@@ -23,6 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const servicesList: string[] = [];
   if (services?.webDev) servicesList.push('Webbutveckling');
   if (services?.aiAutomation) servicesList.push('AI-Automation');
+  if (services?.unsure) servicesList.push('Vet inte än');
 
   try {
     await transporter.sendMail({

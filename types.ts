@@ -22,5 +22,8 @@ export interface ContactFormData {
   services: {
     webDev: boolean;
     aiAutomation: boolean;
+    unsure?: boolean;
   };
+  // Mobile-only dropdown value; mapped onto `services` before submit
+  serviceChoice?: '' | 'webDev' | 'aiAutomation' | 'both' | 'unsure';
 }

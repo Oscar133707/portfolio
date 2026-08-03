@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Monitor, Bot, Check, Sparkles } from 'lucide-react';
+import { Monitor, Sparkles, Check, ArrowUpRight } from 'lucide-react';
 
 interface ServiceFeatureProps {
   text: string;
-  colorClass: string;
 }
 
-const ServiceFeature: React.FC<ServiceFeatureProps> = ({ text, colorClass }) => (
+const ServiceFeature: React.FC<ServiceFeatureProps> = ({ text }) => (
   <li className="flex items-start space-x-3">
-    <div className={`mt-1 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${colorClass} bg-opacity-10`}>
-      <Check size={12} className={colorClass} strokeWidth={3} />
-    </div>
-    <span className="text-slate-600 text-base leading-relaxed">{text}</span>
+    <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-grad1 via-grad2 to-grad3 flex items-center justify-center">
+      <Check size={12} className="text-white" strokeWidth={3.5} />
+    </span>
+    <span className="text-slate-600 text-[15px] leading-relaxed">{text}</span>
   </li>
 );
 
 interface ServiceCardProps {
+  index: string;
+  tag: string;
   title: string;
   description: string;
   features: string[];
   icon: React.ReactNode;
-  theme: 'blue' | 'purple';
   delay: number;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features, icon, theme, delay }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ index, tag, title, description, features, icon, delay }) => {
   // Dynamically tracks whether the device supports true hover (mouse).
-  // Listens for changes so DevTools device simulation is respected.
   const [canHover, setCanHover] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -42,45 +41,50 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  const isBlue = theme === 'blue';
-  const bgGradient = isBlue ? 'from-blue-500 to-cyan-400' : 'from-purple-500 to-indigo-500';
-  const featureColor = isBlue ? 'text-blue-600' : 'text-purple-600';
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.5, delay }}
       whileHover={canHover ? { y: -8 } : undefined}
       whileTap={{ y: -2 }}
       onMouseEnter={() => { if (canHover) setIsHovered(true); }}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative h-full bg-white rounded-3xl p-8 md:p-10 border border-slate-100 ${isHovered ? 'shadow-2xl' : 'shadow-sm'} transition-all duration-300 ease-out flex flex-col active:translate-y-[-2px] active:shadow-lg`}
+      className="relative h-full rounded-3xl p-[1.5px] bg-gradient-to-br from-grad1/40 via-grad2/30 to-grad3/40"
     >
-      {/* Icon Container */}
-      <div className="mb-8">
-        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${bgGradient} flex items-center justify-center text-white shadow-lg transform transition-transform duration-300 ${isHovered ? 'scale-110 rotate-3' : ''}`}>
-          {icon}
+      <div className={`relative h-full bg-white rounded-[1.4rem] p-8 md:p-10 flex flex-col transition-shadow duration-300 ${isHovered ? 'shadow-2xl shadow-grad2/15' : 'card-soft'}`}>
+        <div className="flex items-start justify-between mb-8">
+          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-grad1 via-grad2 to-grad3 flex items-center justify-center text-white shadow-lg shadow-grad2/20 transform transition-transform duration-300 ${isHovered ? 'scale-110 rotate-3' : ''}`}>
+            {icon}
+          </div>
+          <span className="font-mono text-[11px] tracking-widest text-slate-400">{index} / {tag}</span>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="flex-1">
-        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4 tracking-tight">
-          {title}
-        </h3>
-        <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-          {description}
-        </p>
+        <div className="flex-1">
+          <h3 className="font-display text-2xl md:text-3xl font-semibold text-slate-900 mb-4 tracking-tight">
+            {title}
+          </h3>
+          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+            {description}
+          </p>
 
-        <div className="w-full h-px bg-slate-100 mb-8" />
+          <div className="w-full h-px bg-black/5 mb-8" />
 
-        <ul className="space-y-4 mb-8">
-          {features.map((feature, idx) => (
-            <ServiceFeature key={idx} text={feature} colorClass={featureColor} />
-          ))}
-        </ul>
+          <ul className="space-y-4 mb-8">
+            {features.map((feature, idx) => (
+              <ServiceFeature key={idx} text={feature} />
+            ))}
+          </ul>
+        </div>
+
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-2 font-medium text-slate-900 hover:text-grad2 transition-colors text-sm"
+        >
+          Diskutera ditt projekt
+          <ArrowUpRight size={16} className={`transition-transform duration-200 ${isHovered ? 'translate-x-0.5 -translate-y-0.5' : ''}`} />
+        </a>
       </div>
     </motion.div>
   );
@@ -88,31 +92,21 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, features,
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-16 md:py-24 bg-slate-50 relative overflow-x-hidden overflow-y-visible scroll-mt-24 w-full px-5 sm:px-6 lg:px-8">
-      {/* Abstract Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-visible pointer-events-none">
-        <div className="absolute top-20 left-0 md:left-10 w-64 md:w-96 h-64 md:h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
-        <div className="absolute top-20 right-0 md:right-10 w-64 md:w-96 h-64 md:h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
+    <section id="services" className="relative py-20 md:py-28 scroll-mt-24 [overflow:clip] w-full px-5 sm:px-6 lg:px-8 border-t border-black/5">
+      {/* Subtle gradient mesh backdrop */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="mesh-orb animate-float-slow w-[36rem] h-[36rem] -top-20 -left-32 bg-grad1/20" />
+        <div className="mesh-orb animate-mesh w-[32rem] h-[32rem] bottom-[-10rem] -right-24 bg-grad3/20" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-
-        {/* Section Header */}
-        <div className="text-center mb-20 md:mb-24">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block py-1 px-3 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold tracking-wide uppercase mb-4"
-          >
-            Vad jag erbjuder
-          </motion.span>
+        <div className="max-w-2xl mb-14 md:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6"
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="font-display font-semibold text-4xl md:text-5xl text-slate-900 tracking-tight leading-[1.1]"
           >
             Tjänster
           </motion.h2>
@@ -120,19 +114,18 @@ const Services: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+            className="mt-5 text-lg text-slate-600 leading-[1.7]"
           >
             Helhetslösningar inom digital utveckling. Jag kombinerar teknisk expertis med affärsförståelse för att skapa värde.
           </motion.p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 max-w-6xl mx-auto">
-
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           <ServiceCard
-            theme="blue"
-            icon={<Monitor size={32} strokeWidth={2.5} />}
+            index="01"
+            tag="WEBB"
+            icon={<Monitor size={30} strokeWidth={2.25} />}
             title="Webbutveckling"
             description="Responsiva, snabba och användarvänliga hemsidor byggda med modern teknik som React och Tailwind CSS."
             features={[
@@ -141,12 +134,13 @@ const Services: React.FC = () => {
               "Modern tech stack (React, TypeScript, Next.js)",
               "Underhållbar och skalbar kod"
             ]}
-            delay={0.2}
+            delay={0.15}
           />
 
           <ServiceCard
-            theme="purple"
-            icon={<Sparkles size={32} strokeWidth={2.5} />}
+            index="02"
+            tag="AI"
+            icon={<Sparkles size={30} strokeWidth={2.25} />}
             title="AI-Automation"
             description="Effektivisera arbetsflöden genom att implementera smarta AI-assistenter och automatiseringar som sparar tid."
             features={[
@@ -155,29 +149,10 @@ const Services: React.FC = () => {
               "Integration med befintliga system",
               "Skräddarsydda lösningar för din verksamhet"
             ]}
-            delay={0.4}
+            delay={0.3}
           />
-
         </div>
       </div>
-
-      {/* Custom Styles for Tailwind config (simulated here for functionality) */}
-      <style>{`
-        @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-          will-change: transform;
-          transform: translateZ(0);
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-      `}</style>
     </section>
   );
 };

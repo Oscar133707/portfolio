@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <div className="bg-white [overflow-x:clip] w-full">
+    <div className="bg-background [overflow-x:clip] w-full">
       <Navbar />
       <main className="[overflow-x:clip] w-full">
         <Hero />

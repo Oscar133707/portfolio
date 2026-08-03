@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Project } from '../types';
 
 interface ProjectCardProps {
   project: Project;
+  index?: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) => {
   // Dynamically tracks whether the device supports true hover (mouse).
   // Listens for changes so DevTools device simulation is respected.
   const [canHover, setCanHover] = useState(false);
@@ -25,53 +26,63 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   }, []);
 
   return (
-    <motion.div
+    <motion.a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
       whileHover={canHover ? { y: -8 } : undefined}
-      transition={{ type: 'spring', stiffness: 300 }}
       onMouseEnter={() => { if (canHover) setIsHovered(true); }}
       onMouseLeave={() => setIsHovered(false)}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-100 flex flex-col h-full active:translate-y-[-2px] active:shadow-xl transition-transform duration-300"
+      className="group relative flex flex-col h-full rounded-3xl bg-white border border-black/5 overflow-hidden card-soft transition-shadow duration-300 focus-visible:outline-2 focus-visible:outline-grad2 focus-visible:outline-offset-2"
     >
-      <div className="relative overflow-hidden h-56">
+      {/* Gradient top hairline that lights up on hover */}
+      <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-grad1 via-grad2 to-grad3 transition-opacity duration-300 z-10 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+
+      <div className="relative overflow-hidden aspect-[16/10]">
         <img
           src={project.imageUrl}
           alt={project.title}
-          className={`w-full h-full object-cover transform transition-transform duration-500 ${isHovered ? 'scale-110' : ''}`}
+          className={`w-full h-full object-cover transform transition-transform duration-500 ${isHovered ? 'scale-105' : 'scale-100'}`}
           loading="lazy"
         />
-        <div className={`absolute inset-0 bg-slate-900/60 transition-opacity duration-300 flex items-center justify-center gap-4 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 bg-white rounded-full text-slate-900 hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
-            title="Besök sida"
-          >
-            <ExternalLink size={20} />
-          </a>
+        <div className={`absolute inset-0 bg-slate-900/40 flex items-center justify-center transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <span className="flex items-center gap-2 text-white font-medium">
+            Besök sida
+            <ArrowUpRight size={18} />
+          </span>
         </div>
       </div>
 
       <div className="p-6 flex-1 flex flex-col">
-        <h3 className={`text-xl font-bold mb-2 transition-colors ${isHovered ? 'text-accent' : 'text-slate-900'}`}>
+        <h3 className={`font-display text-xl font-semibold mb-2 transition-colors ${isHovered ? 'text-gradient' : 'text-slate-900'}`}>
           {project.title}
         </h3>
-        <p className="text-slate-600 mb-4 flex-1 text-base leading-[1.7]">
+        <p className="text-slate-600 mb-5 flex-1 text-[15px] leading-[1.7]">
           {project.description}
         </p>
 
-        {/* View Project CTA */}
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-accent hover:text-blue-600 font-medium text-sm mt-auto transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-blue-400 focus-visible:outline-offset-2"
-        >
+        {/* Tech chips (mono, subtle) */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {project.technologies.map((tech) => (
+            <span
+              key={tech}
+              className="font-mono text-[11px] text-slate-600 border border-black/10 bg-slate-50 rounded-full px-2.5 py-1"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <span className="inline-flex items-center gap-2 text-slate-900 font-medium text-sm mt-auto">
           Se projekt
-          <ArrowRight size={16} className={`transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
-        </a>
+          <ArrowUpRight size={16} className={`transition-transform duration-200 ${isHovered ? 'translate-x-0.5 -translate-y-0.5 text-grad2' : ''}`} />
+        </span>
       </div>
-    </motion.div>
+    </motion.a>
   );
 };
 

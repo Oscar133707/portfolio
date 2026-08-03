@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Webbutvecklare & AI-Specialist | Portfolio</title>
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter (body), Space Grotesk (display), Space Mono (technical labels) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,37 +18,68 @@
           extend: {
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
+              display: ['"Space Grotesk"', 'Inter', 'sans-serif'],
+              mono: ['"Space Mono"', 'ui-monospace', 'monospace'],
             },
             colors: {
-              primary: '#0F172A', // Slate 900
-              accent: '#3B82F6',  // Blue 500
-              secondary: '#64748B', // Slate 500
-              background: '#F8FAFC', // Slate 50
-            }
+              primary: '#0F172A',    // Slate 900
+              accent: '#3B82F6',     // Blue 500
+              secondary: '#64748B',  // Slate 500
+              background: '#FAFAF9',  // warm paper white (Barely-There base)
+              ink: '#F97316',        // warm hand-drawn annotation accent (orange)
+              // Tech-bro gradient stops (violet -> blue -> teal)
+              grad1: '#8B5CF6',
+              grad2: '#3B82F6',
+              grad3: '#2DD4BF',
+            },
+            animation: {
+              'mesh': 'mesh 24s ease-in-out infinite',
+              'float-slow': 'floatSlow 9s ease-in-out infinite',
+            },
+            keyframes: {
+              mesh: {
+                '0%,100%': { transform: 'translate(0,0) scale(1)' },
+                '33%': { transform: 'translate(4%,-3%) scale(1.08)' },
+                '66%': { transform: 'translate(-3%,3%) scale(0.94)' },
+              },
+              floatSlow: {
+                '0%,100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+            },
           }
-        }
+        },
+        plugins: [
+          /* Only apply hover:/group-hover: styles on devices with a real mouse —
+             prevents "stuck" hover effects lingering after a tap on touch screens. */
+          function ({ addVariant }) {
+            addVariant('hover', '@media (hover: hover) { &:hover }');
+            addVariant('group-hover', '@media (hover: hover) { :merge(.group):hover & }');
+          },
+        ],
       }
     </script>
     <style>
-      /* Custom scrollbar for better aesthetics */
+      /* Custom scrollbar — subtle, matches the paper base */
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 9px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: #FAFAF9;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 5px;
+        background: #d6d3d1;
+        border-radius: 6px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+        background: #a8a29e;
       }
     </style>
   <script type="importmap">
 {
   "imports": {
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
     "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
@@ -72,6 +103,7 @@
         /* Skip when virtual keyboard is active (form field focused) */
         var active = document.activeElement;
         if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+        if (document.body.style.overflow === 'hidden') return; /* Menyn är öppen */
         var now = window.visualViewport.height;
         var diff = last - now;
         last = now;
@@ -83,7 +115,7 @@
     })();
   </script>
 </head>
-  <body class="bg-white text-primary antialiased selection:bg-accent selection:text-white">
+  <body class="bg-background text-primary antialiased selection:bg-grad1 selection:text-white">
     <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

@@ -112,31 +112,17 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
     [emblaApi]
   );
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept keys when the user is typing in a form field
-      const target = e.target as HTMLElement;
-      const isFormField =
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.tagName === 'SELECT' ||
-        target.isContentEditable;
-
-      if (isFormField) return;
-
-      if (e.key === 'ArrowLeft') {
-        scrollPrev();
-      } else if (e.key === 'ArrowRight') {
-        scrollNext();
-      } else if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        setIsAutoplayPaused((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+  // Keyboard navigation — scoped to the carousel itself (only when it has focus),
+  // so it never hijacks normal page scrolling (e.g. Space) elsewhere on the site.
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft') {
+      scrollPrev();
+    } else if (e.key === 'ArrowRight') {
+      scrollNext();
+    } else if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      setIsAutoplayPaused((prev) => !prev);
+    }
   }, [scrollPrev, scrollNext]);
 
   // Handle touch/swipe interactions
@@ -147,12 +133,11 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
   useEffect(() => {
     if (!emblaApi) return;
 
+    // 'pointerDown' already covers touch, mouse and pen interactions
     emblaApi.on('pointerDown', handleInteraction);
-    emblaApi.on('touchStart', handleInteraction);
 
     return () => {
       emblaApi.off('pointerDown', handleInteraction);
-      emblaApi.off('touchStart', handleInteraction);
     };
   }, [emblaApi, handleInteraction]);
 
@@ -160,10 +145,12 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
 
   return (
     <div
-      className="block md:hidden w-full"
+      className="block lg:hidden w-full focus:outline-none"
       role="region"
       aria-label="Taekwon-do competition photos carousel"
       aria-live="polite"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       {/* Carousel Container */}
       <div className="relative overflow-hidden rounded-xl shadow-lg">
