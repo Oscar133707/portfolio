@@ -2,10 +2,18 @@ export interface Project {
   id: number;
   title: string;
   description: string;
-  technologies: string[];
   imageUrl: string;
   link: string;
   category: 'Webb' | 'AI' | 'E-handel';
+}
+
+// The one project highlighted above the grid. Carries the extra
+// selling points (tagline, social proof, launch result) that the
+// standard ProjectCard does not render.
+export interface FeaturedCase extends Project {
+  tagline: string;
+  stats: { value: string; label: string }[];
+  highlight: string;
 }
 
 export interface Service {

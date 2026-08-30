@@ -65,18 +65,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) => {
           {project.description}
         </p>
 
-        {/* Tech chips (mono, subtle) */}
-        <div className="flex flex-wrap gap-2 mb-5">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="font-mono text-[11px] text-slate-600 border border-black/10 bg-slate-50 rounded-full px-2.5 py-1"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
         <span className="inline-flex items-center gap-2 text-slate-900 font-medium text-sm mt-auto">
           Se projekt
           <ArrowUpRight size={16} className={`transition-transform duration-200 ${isHovered ? 'translate-x-0.5 -translate-y-0.5 text-grad2' : ''}`} />

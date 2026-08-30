@@ -227,20 +227,34 @@ background: '#F8FAFC'  // slate-50
 
 ### Portfolio ([components/Portfolio.tsx](components/Portfolio.tsx))
 **Features:**
-- Responsive grid: 1 col mobile, 2 col tablet, 3 col desktop
-- Static project data array (hardcoded)
-- Uses Project interface from types.ts
+- **Featured case first:** one large `FeaturedProject` card spans the full width above the grid. 95 Garage (https://95garage.se) is the current featured case — it is the newest and best-performing client site, so it must stay the first and most prominent thing in this section.
+- Below it, a `FLER PROJEKT` mono label, then the responsive grid: 1 col mobile, 2 col tablet, 3 col desktop
+- Grid order is deliberate: Delita → Mindsport → Josco. Josco is kept but intentionally last.
+- Decorative `mesh-orb` backdrop (matches About/Services)
+- Static data hardcoded in the component: `featuredCase` (`FeaturedCase`) + `projects` (`Project[]`)
 
-**Data Location:** Projects array defined in component file.
+**Data Location:** `featuredCase` object and `projects` array defined in component file.
+
+### FeaturedProject ([components/FeaturedProject.tsx](components/FeaturedProject.tsx))
+**Features:**
+- Full-width 2-column card (`lg:grid-cols-[1.1fr_1fr]`) — image panel left, content right; stacks on mobile
+- Gradient-border shell (`p-[1.5px]` + inner `rounded-[1.4rem] bg-white`), same pattern as Services cards
+- `NYTT · 2026` gradient pill + `SENASTE PROJEKTET` mono label, tagline, social-proof pills (rating + customers), a gradient `RESULTAT` callout, tech chips, and a gradient CTA button
+- Whole card is one `motion.a` to the live site; the CTA is a `<span>` (never nest an `<a>`)
+- Hover gated behind `matchMedia('(hover: hover)')` — same block as ProjectCard
+
+**Important:** The image uses `object-contain` on a tinted panel, **not** `object-cover`. The screenshot is a laptop mockup on a white background; `object-cover` crops the laptop in the taller desktop column.
+
+**Data:** Takes a `FeaturedCase` (extends `Project` with `tagline`, `stats`, `highlight`) from types.ts.
 
 ### ProjectCard ([components/ProjectCard.tsx](components/ProjectCard.tsx))
 **Features:**
-- Hover animation (y: -8px with spring physics)
-- Image hover overlay with external link icon
+- Hover animation (y: -8px) gated behind `matchMedia('(hover: hover)')` so touch devices never get stuck hover states
+- Gradient top hairline + `Besök sida` image overlay on hover
 - Lazy loading images
-- Lucide React ExternalLink icon
+- Lucide React `ArrowUpRight` icon
 
-**Animation:** Spring-based hover with stiffness: 300.
+**Animation:** Scroll-in fade/rise with `index * 0.08`s stagger.
 
 ### Services ([components/Services.tsx](components/Services.tsx))
 **Features:**
