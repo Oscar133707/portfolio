@@ -12,10 +12,10 @@ const About: React.FC = () => {
   // Mix of international competition shots + one clear SM 2026 win image
   const images: ImageItem[] = [
     { src: "/compressed 2/sm2026-guld.jpg", alt: "Oscar Johansson som Svensk Mästare 2026 med pokal och guldmedaljer", label: "Svensk Mästare 2026" },
-    { src: "/compressed 2/031EAC96-CABA-47BF-B058-6D094FDB808F.jpg", alt: "SM-final 2025 - Oscar Johansson slår motståndaren", label: "SM-final 2025" },
-    { src: "/compressed 2/IMG_3531.jpg", alt: "VM Kroatien 2025 - Oscar Johansson i tävling", label: "VM Kroatien 2025" },
-    { src: "/compressed 2/592ab3c0-18ad-4c40-9c6d-abaa3181cca6 2.jpg", alt: "Sveriges landslag - MMC Polen 2023", label: "MMC Polen 2023" },
-    { src: "/compressed 2/IMG_3505.jpg", alt: "Irländska mästerskapen 2024 - Oscar Johansson", label: "Irländska mästerskapen 2024" },
+    { src: "/compressed 2/031EAC96-CABA-47BF-B058-6D094FDB808F.jpg", alt: "SM-final 2025, Oscar Johansson slår motståndaren", label: "SM-final 2025" },
+    { src: "/compressed 2/IMG_3531.jpg", alt: "VM Kroatien 2025, Oscar Johansson i tävling", label: "VM Kroatien 2025" },
+    { src: "/compressed 2/592ab3c0-18ad-4c40-9c6d-abaa3181cca6 2.jpg", alt: "Sveriges landslag, MMC Polen 2023", label: "MMC Polen 2023" },
+    { src: "/compressed 2/IMG_3505.jpg", alt: "Irländska mästerskapen 2024, Oscar Johansson", label: "Irländska mästerskapen 2024" },
   ];
 
   return (
@@ -56,7 +56,7 @@ const About: React.FC = () => {
               <div className="relative overflow-hidden rounded-2xl card-soft group min-h-0">
                 <img
                   src="/compressed 2/em-slovenien-2026.jpg"
-                  alt="EM Slovenien 2026 - Oscar Johansson med tränare"
+                  alt="EM Slovenien 2026, Oscar Johansson med tränare"
                   className="absolute inset-0 w-full h-full object-cover object-[50%_55%] transition-transform duration-500 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
@@ -68,7 +68,7 @@ const About: React.FC = () => {
               <div className="relative overflow-hidden rounded-2xl card-soft group min-h-0">
                 <img
                   src="/compressed 2/IMG_3531.jpg"
-                  alt="VM Kroatien 2025 - Oscar Johansson i tävling"
+                  alt="VM Kroatien 2025, Oscar Johansson i tävling"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
@@ -94,8 +94,8 @@ const About: React.FC = () => {
 
             <div className="space-y-5 text-base md:text-lg text-slate-700 leading-[1.7]">
               <p>
-                Jag heter Oscar Johansson och jag är en dedikerad landslagstävlande i Taekwon-do —
-                regerande svensk mästare — och passionerad webbutvecklare &amp; AI-specialist.
+                Jag heter Oscar Johansson. Jag är landslagstävlande i Taekwon-do och regerande
+                svensk mästare, och samtidigt passionerad webbutvecklare och AI-specialist.
               </p>
 
               <p>

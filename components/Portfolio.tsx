@@ -1,32 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from './ProjectCard';
-import FeaturedProject from './FeaturedProject';
-import { Project, FeaturedCase } from '../types';
-
-// The newest case, shown large above the grid.
-const featuredCase: FeaturedCase = {
-  id: 4,
-  title: "95 Garage",
-  tagline: "Premium bilrekond & detailing i Ljungby",
-  description: "En komplett webbplats med bokningsformulär, bildgalleri för före/efter, kundrecensioner och egna sidor för varje tjänst — allt för att göra det enkelt för kunder att hitta, lita på och boka. Snabb, sökmotoroptimerad och byggd för att omvandla besökare till betalande kunder.",
-  imageUrl: "/compressed 2/95garage-mockup.jpg",
-  link: "https://95garage.se",
-  category: "Webb",
-  stats: [
-    { value: "5.0/5.0", label: "i betyg" },
-    { value: "250+", label: "nöjda kunder" }
-  ],
-  highlight: "Första kundförfrågningarna kom in inom 48 timmar efter lansering."
-};
+import { Project } from '../types';
 
 const projects: Project[] = [
   {
-    id: 1,
-    title: "Delita Advise",
-    description: "Modern webbplats för Delita Advise, en digital redovisningsbyrå i Malmö. Professionell design med fokus på användarvänlighet och tillgänglighet.",
-    imageUrl: "/compressed 2/Namnlös design (4).webp",
-    link: "https://delita.se",
+    id: 4,
+    title: "95 Garage",
+    description: "Webbplats för 95 Garage i Ljungby, premium bilrekond och detailing. Bokningsformulär, bildgalleri och egna sidor per tjänst — byggd för att omvandla besökare till bokningar.",
+    imageUrl: "/compressed 2/95garage-mockup.jpg",
+    link: "https://95garage.se",
     category: "Webb"
   },
   {
@@ -73,21 +56,9 @@ const Portfolio: React.FC = () => {
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
             className="mt-5 text-lg text-slate-600 leading-[1.7]"
           >
-            Ett urval av projekt där jag hjälpt företag att synas bättre och sälja mer online — senast för 95 Garage i Ljungby.
+            Ett urval av projekt där jag hjälpt företag att synas bättre och sälja mer online. Senast för 95 Garage i Ljungby.
           </motion.p>
         </div>
-
-        <FeaturedProject project={featuredCase} />
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="mt-16 md:mt-20 mb-8"
-        >
-          <span className="font-mono text-[11px] tracking-widest text-slate-400">FLER PROJEKT</span>
-        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project, index) => (
