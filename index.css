@@ -1,3 +1,34 @@
+/* ==========================================================================
+   Design tokens — dark ink base, cobalt accent, medal-gold secondary.
+   Colours are RGB channel triplets so Tailwind can apply opacity modifiers
+   (see the tailwind.config in index.html). Method inspired by
+   docs/design-reference-danwikstudio.md — palette and type are our own.
+   ========================================================================== */
+:root {
+  --c-bas: 11 13 18;          /* #0B0D12 page */
+  --c-bas-djup: 7 8 12;       /* #07080C deepest panels */
+  --c-yta: 18 21 28;          /* #12151C card surface */
+  --c-yta-hog: 25 29 38;      /* #191D26 raised surface */
+  --c-fg: 242 241 236;        /* #F2F1EC text */
+  --c-dump: 168 173 184;      /* #A8ADB8 muted text */
+  --c-dump-svag: 124 130 143; /* #7C828F faint text */
+  --c-linje: 38 43 56;        /* #262B38 hairlines */
+  --c-accent: 61 91 240;      /* #3D5BF0 cobalt (buttons, fills) */
+  --c-accent-ljus: 142 162 255; /* #8EA2FF cobalt for text on dark */
+  --c-guld: 212 168 83;       /* #D4A853 medal gold */
+
+  --ease-mjuk: cubic-bezier(.22, 1, .36, 1);
+  --ease-fjader: cubic-bezier(.34, 1.4, .64, 1);
+  --ease-panel: cubic-bezier(.32, .72, 0, 1);
+
+  --shadow-upphojd: 0 1px 2px rgb(0 0 0 / .5), 0 6px 16px -6px rgb(0 0 0 / .6);
+  --shadow-svavande: 0 2px 4px rgb(0 0 0 / .5), 0 10px 24px -8px rgb(0 0 0 / .6), 0 24px 56px -20px rgb(0 0 0 / .7);
+
+  --brus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  color-scheme: dark;
+}
+
 /* Base styles */
 * {
   margin: 0;
@@ -18,27 +49,28 @@ body {
   position: relative;
   font-size: 16px; /* Minimum readable size */
   line-height: 1.7; /* Better readability */
-  background-color: #FAFAF9; /* warm paper base — Barely-There UI */
+  background-color: rgb(var(--c-bas));
+  color: rgb(var(--c-fg));
 }
 
-/* Typography — Space Grotesk for display headings (thin, modern) */
-h1, h2, h3 {
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
+/* Typography — Bricolage Grotesque for display headings */
+h1, h2, h3, h4 {
+  font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
 }
 
 h1 {
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
 h2 {
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 h3 {
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
 }
 
 p {
@@ -46,61 +78,383 @@ p {
   font-size: 16px; /* Minimum readable size on mobile */
 }
 
-/* ---- Design system utilities ---- */
+/* ---- Surfaces ---------------------------------------------------------- */
 
-/* Tech-bro gradient text (trend 9): violet -> blue -> teal */
-.text-gradient {
-  background-image: linear-gradient(100deg, #8B5CF6 0%, #3B82F6 50%, #2DD4BF 100%);
+/* Textured surface: soft corner glows + film grain. Depth without visible blobs. */
+.yta-textur {
+  position: relative;
+  isolation: isolate;
+}
+.yta-textur::before,
+.yta-textur::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.yta-textur::before {
+  z-index: -2;
+  /* Fade the glows out at the section edges so stacked sections never show a seam */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  background-image:
+    radial-gradient(ellipse 70% 55% at 8% -6%, rgb(var(--c-accent) / .17), transparent 60%),
+    radial-gradient(ellipse 50% 42% at 94% 4%, rgb(var(--c-guld) / .06), transparent 62%),
+    radial-gradient(ellipse 85% 60% at 50% 112%, rgb(var(--c-accent) / .07), transparent 70%);
+}
+.yta-textur::after {
+  z-index: -1;
+  opacity: .05;
+  background-image: var(--brus);
+}
+/* Mirrored glow placement for alternating sections */
+.yta-spegel::before {
+  background-image:
+    radial-gradient(ellipse 65% 50% at 96% -4%, rgb(var(--c-accent) / .15), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 4% 18%, rgb(var(--c-guld) / .05), transparent 62%),
+    radial-gradient(ellipse 80% 55% at 40% 110%, rgb(var(--c-accent) / .06), transparent 70%);
+}
+
+/* Faint 1px grid that fades out towards the edges (hero only) */
+.yta-rutnat {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(255 255 255 / .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / .035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 20%, transparent 75%);
+}
+
+/* Section divider — hairline that fades at both ends */
+.skiljelinje {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--c-linje)), transparent);
+}
+
+/* Subtle metallic sheen on display text */
+.text-glans {
+  background-image: linear-gradient(100deg, rgb(var(--c-fg)) 0%, rgb(var(--c-accent-ljus)) 55%, rgb(var(--c-accent)) 110%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Animated gradient mesh backdrop (trend 6 — purposeful advanced motion) */
-.mesh-orb {
+/* ---- Cards ------------------------------------------------------------- */
+
+.kort {
+  position: relative;
+  isolation: isolate;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(var(--c-linje));
+  background: linear-gradient(180deg, rgb(var(--c-yta-hog)) 0%, rgb(var(--c-yta)) 100%);
+  box-shadow: var(--shadow-upphojd), inset 0 1px 0 rgb(255 255 255 / .04);
+  transition: transform .45s var(--ease-fjader), border-color .3s var(--ease-mjuk);
+}
+/* Gradient hairline along the top edge */
+.kort::before {
+  content: "";
   position: absolute;
-  border-radius: 9999px;
-  filter: blur(60px);
-  opacity: 0.5;
-  will-change: transform;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--c-accent-ljus) / .75), transparent);
+  opacity: .35;
+  transition: opacity .45s var(--ease-mjuk);
   pointer-events: none;
 }
+/* Floating shadow + accent rim, faded in on hover */
+.kort::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  border: 1px solid rgb(var(--c-accent) / .45);
+  box-shadow: var(--shadow-svavande), 0 0 48px -14px rgb(var(--c-accent) / .45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s var(--ease-mjuk);
+}
+.kort-guld::before {
+  background: linear-gradient(90deg, transparent, rgb(var(--c-guld) / .8), transparent);
+  opacity: .6;
+}
 
-/* Film grain overlay (trend 3 — human/anti-AI texture) */
-.grain-overlay {
+/* Round arrow button inside cards */
+.kort-pil {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--c-linje));
+  background: rgb(var(--c-bas) / .6);
+  color: rgb(var(--c-fg));
+  transition: transform .45s var(--ease-fjader), background-color .3s var(--ease-mjuk), border-color .3s var(--ease-mjuk);
+}
+.kort-pil svg {
+  transition: transform .45s var(--ease-fjader);
+}
+
+@media (hover: hover) {
+  .kort-interaktiv:hover {
+    transform: translateY(-4px);
+  }
+  .kort-interaktiv:hover::before,
+  .kort-interaktiv:hover::after {
+    opacity: 1;
+  }
+  .kort-interaktiv:hover .kort-pil {
+    transform: scale(1.08);
+    background: rgb(var(--c-accent));
+    border-color: rgb(var(--c-accent));
+  }
+  .kort-interaktiv:hover .kort-pil svg {
+    transform: translate(1.5px, -1.5px);
+  }
+}
+.kort-interaktiv:active {
+  transform: scale(.99);
+}
+
+/* Browser-window frame around site screenshots */
+.fonster {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgb(var(--c-linje));
+  background: rgb(var(--c-bas-djup));
+}
+.fonster-list {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .55rem .75rem;
+  border-bottom: 1px solid rgb(var(--c-linje));
+  background: rgb(var(--c-yta-hog));
+}
+.fonster-prick {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 9999px;
+  background: rgb(var(--c-linje));
+}
+
+/* ---- Buttons ----------------------------------------------------------- */
+
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 48px;
+  padding: .8rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: transform .4s var(--ease-fjader), background-color .25s var(--ease-mjuk), box-shadow .3s var(--ease-mjuk), border-color .25s var(--ease-mjuk), color .25s var(--ease-mjuk);
+}
+.knapp svg {
+  transition: transform .4s var(--ease-fjader);
+}
+.knapp-primar {
+  background: rgb(var(--c-accent));
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 10px 28px -10px rgb(var(--c-accent) / .8);
+}
+.knapp-sekundar {
+  border: 1px solid rgb(var(--c-linje));
+  background: rgb(255 255 255 / .04);
+  color: rgb(var(--c-fg));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+@media (hover: hover) {
+  .knapp:hover {
+    transform: translateY(-2px);
+  }
+  .knapp:hover svg {
+    transform: translateX(3px);
+  }
+  .knapp-primar:hover {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .22), 0 14px 36px -10px rgb(var(--c-accent) / .95);
+  }
+  .knapp-sekundar:hover {
+    border-color: rgb(var(--c-dump-svag));
+    background: rgb(255 255 255 / .08);
+  }
+}
+.knapp:active {
+  transform: scale(.98);
+}
+
+/* ---- Micro-scenes -------------------------------------------------------
+   Looping illustrations inside cards. They only run once the scene root has
+   `.is-visible` (set by useSceneInView) and freeze under reduced motion.
+   ------------------------------------------------------------------------ */
+
+/* Web scene: a page "building itself" block by block, then going live */
+.bygg-block {
+  transform-origin: left center;
+  opacity: 0;
+}
+.is-visible .bygg-block {
+  animation: bygg 10s var(--ease-mjuk) infinite;
+  animation-delay: calc(var(--i) * .22s);
+}
+@keyframes bygg {
+  0% { opacity: 0; transform: scaleX(.35); }
+  7% { opacity: 1; transform: none; }
+  86% { opacity: 1; transform: none; }
+  94%, 100% { opacity: 0; transform: none; }
+}
+.bygg-live {
+  opacity: 0;
+}
+.is-visible .bygg-live {
+  animation: bygg-live 10s var(--ease-fjader) infinite;
+}
+@keyframes bygg-live {
+  0%, 30% { opacity: 0; transform: translateY(6px) scale(.9); }
+  36%, 86% { opacity: 1; transform: none; }
+  94%, 100% { opacity: 0; transform: none; }
+}
+.bygg-markor {
+  opacity: 0;
+}
+.is-visible .bygg-markor {
+  animation: bygg-markor 10s var(--ease-mjuk) infinite;
+}
+@keyframes bygg-markor {
+  0% { opacity: 0; transform: translate(0, 0); }
+  6% { opacity: 1; }
+  28% { opacity: 1; transform: translate(var(--mx), var(--my)); }
+  31% { transform: translate(var(--mx), var(--my)) scale(.85); }
+  34% { transform: translate(var(--mx), var(--my)) scale(1); }
+  80% { opacity: 1; transform: translate(var(--mx), var(--my)); }
+  90%, 100% { opacity: 0; transform: translate(var(--mx), var(--my)); }
+}
+/* Light sweep across the finished page */
+.bygg-svep {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgb(var(--c-accent-ljus) / .12), transparent);
+  transform: translateX(-100%);
+}
+.is-visible .bygg-svep {
+  animation: bygg-svep 10s var(--ease-mjuk) infinite;
+}
+@keyframes bygg-svep {
+  0%, 34% { transform: translateX(-100%); }
+  54%, 100% { transform: translateX(320%); }
+}
+
+/* AI scene: packets flowing between nodes */
+.flode-spar {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgb(var(--c-linje));
+}
+.flode-paket {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgb(var(--c-accent-ljus)), transparent);
+  transform: translateX(-110%);
+}
+.is-visible .flode-paket {
+  animation: flode 3s var(--ease-panel) infinite;
+  animation-delay: calc(var(--i) * 1.1s);
+}
+@keyframes flode {
+  0% { transform: translateX(-110%); }
+  55%, 100% { transform: translateX(240%); }
+}
+.puls-ring {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.22;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  border: 1px solid rgb(var(--c-accent-ljus) / .7);
+  opacity: 0;
+}
+.is-visible .puls-ring {
+  animation: puls 3s var(--ease-mjuk) infinite;
+  animation-delay: calc(var(--i, 0) * 1.5s);
+}
+@keyframes puls {
+  0% { opacity: .6; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+/* Log rows appearing one by one */
+.logg-rad {
+  opacity: 0;
+}
+.is-visible .logg-rad {
+  animation: logg 9s var(--ease-mjuk) infinite;
+  animation-delay: calc(.6s + var(--i) * .9s);
+}
+@keyframes logg {
+  0% { opacity: 0; transform: translateY(8px); }
+  6% { opacity: 1; transform: none; }
+  70% { opacity: 1; transform: none; }
+  78%, 100% { opacity: 0; transform: none; }
 }
 
-/* Hand-drawn marker highlight (trend 3) — wraps safely across lines */
-.marker-underline {
-  background-image: linear-gradient(120deg, rgba(249, 115, 22, 0.26), rgba(249, 115, 22, 0.26));
-  background-repeat: no-repeat;
-  background-position: 0 82%;
-  background-size: 100% 0.34em;
-  border-radius: 2px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+/* Process timeline: connectors fill, nodes light up in sequence (plays once) */
+/* Each connector fills right before the next node lights up */
+.tl-fyll {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(var(--c-accent)), rgb(var(--c-accent-ljus)));
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform .45s var(--ease-mjuk);
+  transition-delay: calc(.3s + var(--i) * .4s);
+}
+@media (min-width: 1024px) {
+  .tl-fyll {
+    background: linear-gradient(to right, rgb(var(--c-accent)), rgb(var(--c-accent-ljus)));
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+}
+.is-visible .tl-fyll {
+  transform: none;
+}
+.tl-glod {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1.5px solid rgb(var(--c-accent-ljus));
+  box-shadow: 0 0 0 4px rgb(var(--c-accent) / .2), 0 0 24px -2px rgb(var(--c-accent) / .8);
+  opacity: 0;
+  transform: scale(.8);
+  transition: opacity .5s var(--ease-mjuk), transform .6s var(--ease-fjader);
+  transition-delay: calc(.35s + var(--i) * .4s);
+}
+.is-visible .tl-glod {
+  opacity: 1;
+  transform: none;
 }
 
-/* Subtle noisy card lift used across sections */
-.card-soft {
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 12px 40px -12px rgba(15, 23, 42, 0.10);
-}
+/* ---- Accessibility ----------------------------------------------------- */
 
-/* Accessibility - Focus states */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid theme('colors.blue.500');
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgb(var(--c-accent-ljus));
   outline-offset: 2px;
 }
 
@@ -136,16 +490,15 @@ select {
 
 /* Email links styling */
 a[href^="mailto:"] {
-  color: theme('colors.blue.400');
+  color: rgb(var(--c-accent-ljus));
   text-decoration: none;
 }
 
 a[href^="mailto:"]:hover {
-  color: theme('colors.blue.300');
-  text-decoration: underline;
+  color: rgb(var(--c-fg));
 }
 
-/* Respect reduced-motion: calm all animation & parallax (trend 6 guardrail) */
+/* Respect reduced-motion: show every micro-scene in its finished state */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -156,5 +509,19 @@ a[href^="mailto:"]:hover {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .bygg-block,
+  .bygg-live,
+  .logg-rad {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .bygg-markor,
+  .bygg-svep,
+  .flode-paket,
+  .puls-ring {
+    animation: none !important;
+    opacity: 0;
   }
 }

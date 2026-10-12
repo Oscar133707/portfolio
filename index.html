@@ -5,47 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Webbutvecklare & AI-Specialist | Portfolio</title>
     
-    <!-- Google Fonts: Inter (body), Space Grotesk (display), Space Mono (technical labels) -->
+    <meta name="theme-color" content="#0B0D12" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Google Fonts: Bricolage Grotesque (display), Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      /* Colours are channel triplets defined in index.css (:root) so opacity
+         modifiers like bg-accent/20 keep working on top of CSS variables. */
+      const token = (name) => `rgb(var(--c-${name}) / <alpha-value>)`;
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
-              display: ['"Space Grotesk"', 'Inter', 'sans-serif'],
-              mono: ['"Space Mono"', 'ui-monospace', 'monospace'],
+              display: ['"Bricolage Grotesque"', 'Inter', 'sans-serif'],
             },
             colors: {
-              primary: '#0F172A',    // Slate 900
-              accent: '#3B82F6',     // Blue 500
-              secondary: '#64748B',  // Slate 500
-              background: '#FAFAF9',  // warm paper white (Barely-There base)
-              ink: '#F97316',        // warm hand-drawn annotation accent (orange)
-              // Tech-bro gradient stops (violet -> blue -> teal)
-              grad1: '#8B5CF6',
-              grad2: '#3B82F6',
-              grad3: '#2DD4BF',
+              bas: token('bas'),
+              'bas-djup': token('bas-djup'),
+              yta: token('yta'),
+              'yta-hog': token('yta-hog'),
+              fg: token('fg'),
+              dump: token('dump'),
+              'dump-svag': token('dump-svag'),
+              linje: token('linje'),
+              accent: token('accent'),
+              'accent-ljus': token('accent-ljus'),
+              guld: token('guld'),
             },
-            animation: {
-              'mesh': 'mesh 24s ease-in-out infinite',
-              'float-slow': 'floatSlow 9s ease-in-out infinite',
+            boxShadow: {
+              upphojd: 'var(--shadow-upphojd)',
+              svavande: 'var(--shadow-svavande)',
             },
-            keyframes: {
-              mesh: {
-                '0%,100%': { transform: 'translate(0,0) scale(1)' },
-                '33%': { transform: 'translate(4%,-3%) scale(1.08)' },
-                '66%': { transform: 'translate(-3%,3%) scale(0.94)' },
-              },
-              floatSlow: {
-                '0%,100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
-              },
+            transitionTimingFunction: {
+              mjuk: 'var(--ease-mjuk)',
+              fjader: 'var(--ease-fjader)',
+              panel: 'var(--ease-panel)',
             },
           }
         },
@@ -60,19 +61,19 @@
       }
     </script>
     <style>
-      /* Custom scrollbar — subtle, matches the paper base */
+      /* Custom scrollbar — subtle, matches the dark ink base */
       ::-webkit-scrollbar {
         width: 9px;
       }
       ::-webkit-scrollbar-track {
-        background: #FAFAF9;
+        background: #0B0D12;
       }
       ::-webkit-scrollbar-thumb {
-        background: #d6d3d1;
+        background: #262B38;
         border-radius: 6px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #a8a29e;
+        background: #3A4152;
       }
     </style>
   <script type="importmap">
@@ -115,7 +116,7 @@
     })();
   </script>
 </head>
-  <body class="bg-background text-primary antialiased selection:bg-grad1 selection:text-white">
+  <body class="bg-bas text-fg antialiased selection:bg-accent selection:text-white">
     <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

@@ -153,7 +153,7 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
       onKeyDown={handleKeyDown}
     >
       {/* Carousel Container */}
-      <div className="relative overflow-hidden rounded-xl shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl border border-linje shadow-svavande">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {images.map((image, index) => (
@@ -172,7 +172,7 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
                 {/* Image Label */}
                 {image.label && (
                   <div className="absolute bottom-0 left-0 p-4">
-                    <span className="inline-block bg-black/60 backdrop-blur-sm text-white font-medium text-sm px-3 py-1.5 rounded-tr-lg">
+                    <span className="inline-block rounded-full border border-white/10 bg-bas/60 backdrop-blur-md text-fg font-medium text-sm px-3 py-1.5">
                       {image.label}
                     </span>
                   </div>
@@ -204,7 +204,7 @@ const TaekwondoCarousel: React.FC<TaekwondoCarouselProps> = ({ images }) => {
       </div>
 
       {/* Image Counter */}
-      <div className="text-center mt-4 text-base font-medium text-slate-700">
+      <div className="text-center mt-4 text-sm font-medium text-dump tabular-nums">
         {selectedIndex + 1} / {images.length}
       </div>
     </div>

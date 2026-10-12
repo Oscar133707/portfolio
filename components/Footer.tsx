@@ -3,28 +3,28 @@ import { Linkedin, Instagram, Code2 } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-950 border-t border-white/10 text-slate-400 py-14 [overflow-x:clip] w-full">
+    <footer className="bg-bas-djup border-t border-linje text-dump py-14 [overflow-x:clip] w-full">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2.5 mb-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-grad1 via-grad2 to-grad3 text-white">
+              <div className="p-2 rounded-xl bg-accent text-white">
                 <Code2 size={20} strokeWidth={2.25} />
               </div>
-              <span className="font-display font-semibold text-lg text-white">Oscar Johansson</span>
+              <span className="font-display font-medium text-lg text-fg">Oscar Johansson</span>
             </div>
-            <p className="text-sm text-slate-500 max-w-xs mx-auto md:mx-0 leading-relaxed">
+            <p className="text-sm text-dump-svag max-w-xs mx-auto md:mx-0 leading-relaxed">
               Elitidrottare, webbutvecklare &amp; AI-specialist. Bygger digitala lösningar med disciplin och precision.
             </p>
           </div>
 
           {/* Contact */}
           <div className="text-center">
-            <h4 className="font-mono text-xs tracking-widest text-slate-500 mb-3">KONTAKT</h4>
+            <h4 className="text-sm font-medium text-dump-svag mb-3">Kontakt</h4>
             <a
               href="mailto:kontakt@oscarjohansson.eu"
-              className="text-base text-blue-400 hover:text-grad3 transition-colors duration-200 inline-block"
+              className="text-base inline-block"
             >
               kontakt@oscarjohansson.eu
             </a>
@@ -32,13 +32,13 @@ const Footer: React.FC = () => {
 
           {/* Social */}
           <div className="text-center md:text-right">
-            <h4 className="font-mono text-xs tracking-widest text-slate-500 mb-3">FÖLJ MIG</h4>
+            <h4 className="text-sm font-medium text-dump-svag mb-3">Följ mig</h4>
             <div className="flex justify-center md:justify-end gap-3">
               <a
                 href="https://www.instagram.com/oscar.johansso/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 flex items-center justify-center rounded-xl border border-white/10 hover:border-transparent hover:bg-gradient-to-br hover:from-grad1 hover:via-grad2 hover:to-grad3 hover:text-white transition-all duration-200 focus-visible:outline-2 focus-visible:outline-grad2 focus-visible:outline-offset-2"
+                className="w-11 h-11 flex items-center justify-center rounded-xl border border-linje text-dump hover:border-accent hover:bg-accent hover:text-white transition-all duration-200"
                 aria-label="Instagram"
               >
                 <Instagram size={22} />
@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
                 href="https://www.linkedin.com/in/oscar-johansson-8aa589364/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 flex items-center justify-center rounded-xl border border-white/10 hover:border-transparent hover:bg-gradient-to-br hover:from-grad1 hover:via-grad2 hover:to-grad3 hover:text-white transition-all duration-200 focus-visible:outline-2 focus-visible:outline-grad2 focus-visible:outline-offset-2"
+                className="w-11 h-11 flex items-center justify-center rounded-xl border border-linje text-dump hover:border-accent hover:bg-accent hover:text-white transition-all duration-200"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={22} />
@@ -57,11 +57,11 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-sm text-slate-500">
+        <div className="border-t border-linje pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-sm text-dump-svag">
             © {new Date().getFullYear()} Oscar Johansson
           </p>
-          <p className="font-mono text-xs text-slate-600">Byggd med React · TypeScript · Tailwind</p>
+          <p className="text-xs text-dump-svag">Byggd med React · TypeScript · Tailwind</p>
         </div>
       </div>
     </footer>

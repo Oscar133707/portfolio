@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Trophy } from 'lucide-react';
+import Reveal from './Reveal';
 import TaekwondoCarousel from './TaekwondoCarousel';
 
 interface ImageItem {
@@ -19,80 +20,50 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="relative py-16 lg:py-24 scroll-mt-24 [overflow:clip] w-full px-5 sm:px-6 lg:px-8">
-      <div className="grain-overlay opacity-[0.12]" aria-hidden="true" />
+    <section id="about" className="yta-textur yta-spegel relative py-20 lg:py-28 scroll-mt-24 [overflow:clip] w-full px-5 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* Mobile / tablet carousel */}
           <TaekwondoCarousel images={images} />
 
           {/* Desktop image collage — international shots + one clear SM win */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="hidden lg:grid grid-cols-5 gap-4 aspect-[5/4] xl:aspect-[6/5] min-w-0"
-          >
+          <Reveal className="hidden lg:grid grid-cols-5 gap-3 aspect-[5/4] xl:aspect-[6/5] min-w-0">
             {/* SM 2026 gold — the clear "I won" image */}
-            <div className="col-span-3 relative overflow-hidden rounded-2xl card-soft group min-h-0">
-              <img
-                src="/compressed 2/sm2026-guld.jpg"
-                alt="Oscar Johansson som Svensk Mästare 2026 med pokal och guldmedaljer"
-                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/55 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4">
-                <span className="inline-block bg-white/90 backdrop-blur-sm text-slate-900 text-sm font-medium px-4 py-2 rounded-full">Svensk Mästare 2026</span>
-              </div>
-            </div>
+            <CollageImage
+              className="col-span-3"
+              src="/compressed 2/sm2026-guld.jpg"
+              alt="Oscar Johansson som Svensk Mästare 2026 med pokal och guldmedaljer"
+              label="Svensk Mästare 2026"
+              imgClassName="object-top"
+              gold
+            />
 
             {/* Right stack — international competitions */}
-            <div className="col-span-2 grid grid-rows-2 gap-4 min-h-0">
+            <div className="col-span-2 grid grid-rows-2 gap-3 min-h-0">
               {/* Crop anchored below centre — the source has ~13% ceiling on top,
                   so object-top framed the roof instead of the two subjects. */}
-              <div className="relative overflow-hidden rounded-2xl card-soft group min-h-0">
-                <img
-                  src="/compressed 2/em-slovenien-2026.jpg"
-                  alt="EM Slovenien 2026, Oscar Johansson med tränare"
-                  className="absolute inset-0 w-full h-full object-cover object-[50%_55%] transition-transform duration-500 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/45 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <span className="inline-block bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-medium px-3 py-1.5 rounded-full">EM Slovenien 2026</span>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-2xl card-soft group min-h-0">
-                <img
-                  src="/compressed 2/IMG_3531.jpg"
-                  alt="VM Kroatien 2025, Oscar Johansson i tävling"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/45 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <span className="inline-block bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-medium px-3 py-1.5 rounded-full">VM Kroatien 2025</span>
-                </div>
-              </div>
+              <CollageImage
+                src="/compressed 2/em-slovenien-2026.jpg"
+                alt="EM Slovenien 2026, Oscar Johansson med tränare"
+                label="EM Slovenien 2026"
+                imgClassName="object-[50%_55%]"
+              />
+              <CollageImage
+                src="/compressed 2/IMG_3531.jpg"
+                alt="VM Kroatien 2025, Oscar Johansson i tävling"
+                label="VM Kroatien 2025"
+              />
             </div>
-          </motion.div>
+          </Reveal>
 
           {/* Text content */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="flex flex-col justify-center lg:pt-2 min-w-0"
-          >
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-slate-900 mb-5 tracking-tight">
+          <div className="flex flex-col justify-center min-w-0">
+            <Reveal as="h2" className="font-display font-medium text-[2.5rem] leading-[1.05] md:text-6xl text-fg mb-6">
               Om mig
-            </h2>
+            </Reveal>
 
-            <div className="space-y-5 text-base md:text-lg text-slate-700 leading-[1.7]">
+            <Reveal delay={0.08} className="space-y-5 text-base md:text-lg text-dump leading-[1.7]">
               <p>
                 Jag heter Oscar Johansson. Jag är landslagstävlande i Taekwon-do och regerande
                 svensk mästare, och samtidigt passionerad webbutvecklare och AI-specialist.
@@ -103,27 +74,59 @@ const About: React.FC = () => {
                 precision och att aldrig ge upp. Dessa värderingar formar också mitt arbete inom
                 webbutveckling och AI-automation.
               </p>
+            </Reveal>
 
-              {/* Highlighted callout */}
-              <div className="mt-6 rounded-2xl p-[1.5px] bg-gradient-to-br from-grad1/50 via-grad2/40 to-grad3/50">
-                <div className="rounded-2xl bg-white/90 backdrop-blur p-5">
-                  <h3 className="font-display text-lg md:text-xl font-semibold text-slate-900 mb-3">
-                    Varje projekt finansierar min Taekwon-do-karriär
-                  </h3>
-                  <p className="text-slate-700 leading-[1.7]">
-                    Pengarna jag tjänar går direkt till internationella tävlingar, träningsläger och
-                    utrustning på elitnivå. När du arbetar med mig blir du en del av min resa mot
-                    VM-medaljer och internationell framgång.
-                  </p>
+            {/* Highlighted callout */}
+            <Reveal delay={0.16} className="mt-8">
+              <div className="kort kort-guld p-6">
+                <div className="flex items-start gap-4">
+                  <span className="mt-0.5 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-guld/15 text-guld">
+                    <Trophy size={20} />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg md:text-xl font-medium text-fg mb-2">
+                      Varje projekt finansierar min Taekwon-do-karriär
+                    </h3>
+                    <p className="text-dump leading-[1.7]">
+                      Pengarna jag tjänar går direkt till internationella tävlingar, träningsläger och
+                      utrustning på elitnivå. När du arbetar med mig blir du en del av min resa mot
+                      VM-medaljer och internationell framgång.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </Reveal>
+          </div>
 
         </div>
       </div>
     </section>
   );
 };
+
+interface CollageImageProps {
+  src: string;
+  alt: string;
+  label: string;
+  className?: string;
+  imgClassName?: string;
+  gold?: boolean;
+}
+
+const CollageImage: React.FC<CollageImageProps> = ({ src, alt, label, className = '', imgClassName = '', gold }) => (
+  <div className={`group relative min-h-0 overflow-hidden rounded-2xl border border-linje shadow-upphojd ${className}`}>
+    <img
+      src={src}
+      alt={alt}
+      className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-mjuk group-hover:scale-[1.04] ${imgClassName}`}
+      loading="lazy"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-bas/80 via-bas/10 to-transparent" />
+    <span className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-bas/60 px-3 py-1.5 text-xs font-medium text-fg backdrop-blur-md">
+      <span className={`h-1.5 w-1.5 rounded-full ${gold ? 'bg-guld' : 'bg-accent-ljus'}`} />
+      {label}
+    </span>
+  </div>
+);
 
 export default About;

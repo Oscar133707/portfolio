@@ -51,9 +51,15 @@ root/
 │   ├── Hero.tsx                # Full-screen hero with split backgrounds
 │   ├── About.tsx               # About section with carousel/grid
 │   ├── TaekwondoCarousel.tsx   # Embla carousel for mobile
-│   ├── Portfolio.tsx           # Project showcase grid
+│   ├── Portfolio.tsx           # 95 Garage case study + project grid
+│   ├── CaseStudy.tsx           # 95 Garage case with verified results
 │   ├── ProjectCard.tsx         # Individual project cards
-│   ├── Services.tsx            # Service offerings
+│   ├── BrowserFrame.tsx        # Browser-window frame for site screenshots
+│   ├── Services.tsx            # Service bento cards with animated micro-scenes
+│   ├── Process.tsx             # 4-step process timeline (#process)
+│   ├── SectionHeading.tsx      # Shared h2 + lead
+│   ├── Reveal.tsx              # Shared scroll reveal (Framer Motion)
+│   ├── useSceneInView.ts       # Starts CSS micro-scenes when visible
 │   ├── Contact.tsx             # Contact form with validation
 │   └── Footer.tsx              # Footer with social links
 ├── public/
@@ -154,13 +160,20 @@ export default ComponentName;
 - **Delivery:** CDN-based (loaded in index.html, NO build-time compilation)
 - **Configuration:** Custom theme colors defined in HTML `<script>` tag
 
-**Custom Theme Colors:**
+**Design system (dark theme, Oct 2026 redesign):** tokens live as RGB channel triplets in `:root` in `index.css` and are mapped in the Tailwind CDN config in `index.html` (so `bg-accent/15` etc. works). Method benchmarked against danwikstudio.se — see [docs/design-reference-danwikstudio.md](docs/design-reference-danwikstudio.md) (a Ljungby competitor: borrow techniques, never their look).
 ```javascript
-primary: '#0F172A',    // slate-900
-accent: '#3B82F6',     // blue-500
-secondary: '#64748B',  // slate-500
-background: '#F8FAFC'  // slate-50
+bas: '#0B0D12', 'bas-djup': '#07080C',   // page / deepest panels
+yta: '#12151C', 'yta-hog': '#191D26',    // card surfaces
+fg: '#F2F1EC', dump: '#A8ADB8', 'dump-svag': '#7C828F', linje: '#262B38',
+accent: '#3D5BF0',        // cobalt — buttons/fills (white text passes AA)
+'accent-ljus': '#8EA2FF', // cobalt for text/icons on dark
+guld: '#D4A853',          // medal gold — athletic merits, "live" states
 ```
+- **Fonts:** Bricolage Grotesque (`font-display`, all h1–h4) + Inter (body). No mono font.
+- **Easings:** `ease-mjuk` (reveals), `ease-fjader` (hover lift/arrows), `ease-panel` (drawer). Shadows: `shadow-upphojd`, `shadow-svavande`.
+- **CSS building blocks (index.css):** `.yta-textur` (+ `.yta-spegel`) textured section surface, `.yta-rutnat` hero grid, `.skiljelinje` section hairline, `.kort` / `.kort-interaktiv` / `.kort-guld` cards, `.kort-pil` arrow button, `.knapp` + `.knapp-primar` / `.knapp-sekundar` buttons, `.fonster` browser frame, `.text-glans` headline sheen, and the micro-scene keyframes (`bygg-*`, `flode-*`, `puls-ring`, `logg-rad`, `tl-*`).
+- **Motion helpers:** `components/Reveal.tsx` (the one scroll reveal used everywhere) and `components/useSceneInView.ts` (adds `is-visible` so CSS micro-scenes only loop once on screen). Don't put Framer transforms and `.kort-interaktiv` on the same element — wrap the card in `<Reveal>` instead.
+- **No promises in copy:** Oscar has not committed to response times, fixed prices or free audits — don't add them.
 
 ### Custom CSS (index.css)
 - Global resets with `overflow-x-hidden` on html, body, #root
@@ -184,7 +197,7 @@ background: '#F8FAFC'  // slate-50
 - Scroll lock is a single `document.body.style.overflow = isOpen ? 'hidden' : ''` — no `position:fixed`/`scrollTo` scroll-jacking
 - Escape key closes the drawer; click on the scrim closes it too
 - Smooth scroll to sections (preventDefault + scrollIntoView, relies on each section's `scroll-mt-*` — no hardcoded offset or setTimeout)
-- Scroll-spy via `IntersectionObserver` over `#about`, `#portfolio`, `#services` highlights the active link in both desktop nav and the drawer
+- Scroll-spy via `IntersectionObserver` over `#about`, `#portfolio`, `#services`, `#process` highlights the active link in both desktop nav and the drawer
 - Lucide React icons
 
 **Key Functions:**
@@ -227,31 +240,26 @@ background: '#F8FAFC'  // slate-50
 
 ### Portfolio ([components/Portfolio.tsx](components/Portfolio.tsx))
 **Features:**
-- Responsive grid of `ProjectCard`s: 1 col mobile, 2 col tablet, 3 col desktop — no featured/highlighted card, all cases render identically
-- Grid order is deliberate: 95 Garage → Mindsport → Josco. Delita was removed (client switched providers, Oscar no longer maintains that site).
-- Decorative `mesh-orb` backdrop (matches About/Services)
+- `CaseStudy` for 95 Garage first (screenshot in `BrowserFrame`, handshake photo, results 5,0 / 250+ / 48 h — verified proof points, don't invent more), then a 2-col grid of `ProjectCard`s: Mindsport → Josco. Delita was removed (client switched providers).
+- Screenshots are crops of the old laptop mockups: `public/compressed 2/{95garage,mindsport,josco}-skarm.jpg` (1290×712)
 - Static data hardcoded in the component: `projects` (`Project[]`)
 
 **Data Location:** `projects` array defined in component file.
 
 ### ProjectCard ([components/ProjectCard.tsx](components/ProjectCard.tsx))
 **Features:**
-- Hover animation (y: -8px) gated behind `matchMedia('(hover: hover)')` so touch devices never get stuck hover states
-- Gradient top hairline + `Besök sida` image overlay on hover
-- Lazy loading images
-- Lucide React `ArrowUpRight` icon
+- `.kort-interaktiv` card link: hairline + floating shadow + arrow on hover (CSS, only under `@media (hover:hover)`)
+- Screenshot in `BrowserFrame` (URL derived from `project.link`), lazy loaded
 
-**Animation:** Scroll-in fade/rise with `index * 0.08`s stagger.
+**Animation:** `<Reveal>` with `index * 0.08`s stagger.
 
 ### Services ([components/Services.tsx](components/Services.tsx))
 **Features:**
-- Two service cards: WebDev & AI-Automation
-- Animated background blobs (CSS keyframes)
-- Icon gradient backgrounds with hover effects
-- Feature lists with color-coded checkmarks
-- Responsive 2-column layout
+- Two bento cards: WebDev & AI-Automation, each with a looping CSS micro-scene (`WebScene`: a page builds itself and goes "Publicerad"; `AiScene`: Förfrågan → AI → Svar flow with log rows). Illustrative only — no fake numbers.
+- Feature lists + "Diskutera ditt projekt" CTA, responsive 2-column layout
 
-**Animations:** CSS keyframe animations for decorative blobs.
+### Process ([components/Process.tsx](components/Process.tsx))
+- Four steps (Samtal → Förslag → Bygge → Lansering); connectors fill and nodes light up once on scroll. Vertical on mobile, horizontal on lg.
 
 ### Contact ([components/Contact.tsx](components/Contact.tsx))
 **Features:**
@@ -260,7 +268,7 @@ background: '#F8FAFC'  // slate-50
 - Email pattern validation
 - Loading state during submission
 - Success message with 5-second auto-hide
-- Dark background styling
+- Dark `bas-djup` section, form inside a `.kort`
 
 **Validation Rules:**
 - Name: Required
